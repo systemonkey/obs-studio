@@ -41,6 +41,13 @@ public:
 
 public slots:
 	void ControlChanged();
+
+	/* media control */
+	void MediaPlay();
+	void MediaPause();
+	void MediaStop();
+	void MediaNext();
+	void MediaPrev();
 };
 
 /* ------------------------------------------------------------------------- */
@@ -79,6 +86,8 @@ private:
 			QLabel**label);
 	QWidget *AddList(obs_property_t *prop, bool &warning);
 	QWidget *AddButton(obs_property_t *prop);
+	void AddMedia(obs_property_t *prop, QFormLayout *layout,
+			QLabel *&label);
 	void AddColor(obs_property_t *prop, QFormLayout *layout, QLabel *&label);
 	void AddFont(obs_property_t *prop, QFormLayout *layout, QLabel *&label);
 
