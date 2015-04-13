@@ -242,6 +242,7 @@ static inline size_t get_property_size(enum obs_property_type type)
 	case OBS_PROPERTY_COLOR:     return 0;
 	case OBS_PROPERTY_BUTTON:    return sizeof(struct button_data);
 	case OBS_PROPERTY_FONT:      return 0;
+	case OBS_PROPERTY_MEDIA:     return sizeof(struct obs_media_callbacks);
 	}
 
 	return 0;
@@ -437,6 +438,21 @@ obs_property_t *obs_properties_add_font(obs_properties_t *props,
 	if (!props || has_prop(props, name)) return NULL;
 	return new_prop(props, name, desc, OBS_PROPERTY_FONT);
 }
+
+obs_property_t *obs_properties_add_media(obs_properties_t *props,
+		const char *name, const char *desc,
+		struct obs_media_callbacks *callbacks)
+{
+	if (!props || has_prop(props, name)) return NULL;
+
+	struct obs_property *p = new_prop(props, name, desc,
+			OBS_PROPERTY_MEDIA);
+	struct obs_media_callbacks *data = get_property_data(p);
+	*data = *callbacks;
+	return p;
+}
+
+/* ------------------------------------------------------------------------- */
 
 static inline bool is_combo(struct obs_property *p)
 {
@@ -766,4 +782,12 @@ double obs_property_list_item_float(obs_property_t *p, size_t idx)
 	struct list_data *data = get_list_fmt_data(p, OBS_COMBO_FORMAT_FLOAT);
 	return (data && idx < data->items.num) ?
 		data->items.array[idx].d : 0.0;
+}
+
+void obs_property_media_get_callbacks(obs_property_t *p,
+		struct obs_media_callbacks *callbacks)
+{
+	struct obs_media_callbacks *data = get_type_data(p, OBS_PROPERTY_MEDIA);
+	if (data && callbacks)
+		*callbacks = *data;
 }
