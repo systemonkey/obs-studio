@@ -53,6 +53,7 @@ enum obs_property_type {
 	OBS_PROPERTY_BUTTON,
 	OBS_PROPERTY_FONT,
 	OBS_PROPERTY_MEDIA,
+	OBS_PROPERTY_EDITABLE_LIST,
 };
 
 enum obs_combo_format {
@@ -82,6 +83,10 @@ enum obs_text_type {
 enum obs_number_type {
 	OBS_NUMBER_SCROLLER,
 	OBS_NUMBER_SLIDER
+};
+
+enum obs_editable_list_type {
+	OBS_EDITABLE_LIST_TYPE_PATH,
 };
 
 #define OBS_FONT_BOLD      (1<<0)
@@ -209,6 +214,11 @@ EXPORT obs_property_t *obs_properties_add_media(obs_properties_t *props,
 		const char *name, const char *description,
 		struct obs_media_callbacks *callbacks);
 
+EXPORT obs_property_t *obs_properties_add_editable_list(obs_properties_t *props,
+		const char *name, const char *description,
+		enum obs_editable_list_type type, const char *filter,
+		const char *default_path);
+
 /* ------------------------------------------------------------------------- */
 
 /**
@@ -281,6 +291,9 @@ EXPORT const char *obs_property_list_item_name(obs_property_t *p, size_t idx);
 EXPORT const char *obs_property_list_item_string(obs_property_t *p, size_t idx);
 EXPORT long long   obs_property_list_item_int(obs_property_t *p, size_t idx);
 EXPORT double      obs_property_list_item_float(obs_property_t *p, size_t idx);
+
+EXPORT const char *obs_property_editable_list_filter(obs_property_t *p);
+EXPORT const char *obs_property_editable_list_default_path(obs_property_t *p);
 
 EXPORT void obs_property_media_get_callbacks(obs_property_t *p,
 		struct obs_media_callbacks *callbacks);
